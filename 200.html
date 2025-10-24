@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>123Sell — RCMP123</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font-family:system-ui,Segoe UI,Roboto,Arial;padding:18px;background:#fff}header{background:#fffbf0;border:1px solid #ffe0b2;padding:16px;border-radius:10px}h1{margin:0;font-size:20px}p.lead{margin:8px 0 0 0;color:#333;font-size:16px}</style>
+</head>
+<body>
+<header>
+  <h1>$1.23 — as easy as 123. Sell for less, always!</h1>
+  <p class="lead">The most affordable way to sell on the internet. Paste a listing URL or connect your eBay sandbox account to import listings instantly.</p>
+</header>
+
+<main style="margin-top:18px">
+  <section style="border:1px dashed #ddd;padding:12px;border-radius:8px">
+     <p>Already have it listed elsewhere? Paste the URL below:</p>
+    <h>As many as 10,000 at a time. </h>
+    <input id="url" placeholder="https://www.ebay.com/itm/..." style="width:68%;padding:8px;border-radius:6px;border:1px Transparent 12px #ccc">
+    <button id="import" style="padding:8px 12px;margin-left:8px;background:#ff6b8a;color:white;border:none;border-radius:6px">Import</button>
+    <div id="status" style="margin-top:10px;color:#333"></div>
+  </section>
+
+  <section style="margin-top:18px">
+    <h3>Connect eBay (sandbox)</h3>
+    <button id="connect-ebay" style="padding:10px 14px;background:#0072ce;color:#fff;border:none;border-radius:6px">Connect eBay Sandbox</button>
+  </section>
+</main>
+
+<script src="/config.js"></script>
+<script>
+document.getElementById('import').addEventListener('click', async ()=>{
+  const url = document.getElementById('url').value.trim();
+  if (!url) return alert('Paste a URL first');
+  ocument.getElementById('connect-ebay').addEventListener('click', ()=>{
+  // opens eBay OAuth start route (implemented server-side)
+  window.location.href = '/auth/ebay/start?sellerId=1'; });
+  document.getElementById('status').textContent = 'Import request sent (server must implement /api/import)';
+});
+document.getElementById('connect-ebay').addEventListener('click', ()=>{
+  // opens eBay OAuth start route (implemented server-side)
+  window.location.href = '/auth/ebay/start?sellerId=1';
+});
+async function checkBlueBookPrice(listingTitle, price) {
+  const blueBookData = await fetch('/bluebook.json').then(r => r.json());
+  const entry = blueBookData.find(
+    i => i.title.toLowerCase() === listingTitle.toLowerCase()
+  );
+
+  if (!entry) return; // no data
+
+  const avg = entry.avgPrice;
+  if (price > avg * 1.25) {
+    alert(`⚠️ Your price is ${Math.round((price / avg - 1) * 100)}% above the Blue Book average (${avg}).`);
+  }
+}[
+  { "title": "Traxxas Slash 4x4", "avgPrice": 289 },
+  { "title": "Arrma Kraton 6S", "avgPrice": 479 }
+]
+</script>
+<footer class="owner-info">
+  <div class="split-owner">
+    <div>Owner: Trevor Halverson</div>
+    <div>Partner AI: ChatGPT (Sparq)</div>
+  </div>
+</footer>
+
+<style>
+  .owner-info {
+    background: #f4f4f4;
+    padding: 1rem;
+    font-size: 0.3rem;
+    text-align: center;
+    border-top: 1px solid #ddd;
+  }
+  .split-owner {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 0.1rem;
+  }
+</style>
+</body>
+</html>

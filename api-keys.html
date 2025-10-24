@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><title>API Keys — 123Sell</title></head><body style="font-family:system-ui;padding:18px">
+<h1>API Keys Template</h1>
+<p>Fill keys and copy into backend/.env</p>
+<form id="f">
+<label>STRIPE_PUBLISHABLE_KEY</label><input name="STRIPE_PUBLISHABLE_KEY"><br>
+<label>STRIPE_SECRET_KEY</label><input name="STRIPE_SECRET_KEY"><br>
+<label>EBAY_CLIENT_ID</label><input name="EBAY_CLIENT_ID"><br>
+<label>EBAY_CLIENT_SECRET</label><input name="EBAY_CLIENT_SECRET"><br>
+<label>EBAY_REDIRECT_URI</label><input name="EBAY_REDIRECT_URI" value="http://localhost:3000/auth/ebay/callback"><br>
+<label>TOKEN_ENCRYPTION_KEY</label><input name="TOKEN_ENCRYPTION_KEY"><br>
+<button type="submit">Show .env</button>
+</form>
+<pre id="out"></pre>
+<script>
+document.getElementById('f').addEventListener('submit', e=>{
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target).entries());
+  let out = '';
+  out += `SITE_NAME=123Sell\nDOMAIN=http://localhost:3000\nPORT=3000\n\n`;
+  out += `STRIPE_PUBLISHABLE_KEY=${d.STRIPE_PUBLISHABLE_KEY||''}\n`;
+  out += `STRIPE_SECRET_KEY=${d.STRIPE_SECRET_KEY||''}\n`;
+  out += `EBAY_CLIENT_ID=${d.EBAY_CLIENT_ID||''}\n`;
+  out += `EBAY_CLIENT_SECRET=${d.EBAY_CLIENT_SECRET||''}\n`;
+  out += `EBAY_REDIRECT_URI=${d.EBAY_REDIRECT_URI||''}\n`;
+  out += `TOKEN_ENCRYPTION_KEY=${d.TOKEN_ENCRYPTION_KEY||''}\n`;
+  out += `DATABASE_URL="file:./dev.db"\n`;
+  document.getElementById('out').textContent = out;
+  alert('Copy the output into backend/.env');
+});
+</script>
+</body></html>

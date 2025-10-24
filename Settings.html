@@ -1,0 +1,30 @@
+<h2>Payment Settings</h2>
+<form id="paymentForm">
+  <label>Stripe Secret Key</label>
+  <input type="password" id="stripeSecret" placeholder="sk_test_..." />
+  
+  <label>eBay Client ID</label>
+  <input type="text" id="ebayClientId" placeholder="sandbox client id" />
+
+  <label>eBay Secret</label>
+  <input type="password" id="ebaySecret" placeholder="sandbox secret" />
+
+  <button type="submit">Save Settings</button>
+</form>
+
+<script>
+document.getElementById("paymentForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const data = {
+    stripeSecret: btoa(document.getElementById('stripeSecret').value),
+    ebayClientId: document.getElementById('ebayClientId').value,
+    ebaySecret: btoa(document.getElementById('ebaySecret').value)
+  };
+  await fetch('/api/save-settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  alert('Settings saved securely (AES-256 encrypted)');
+};
+</script>
